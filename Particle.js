@@ -3,7 +3,7 @@ class Particle{
     this.pos = createVector(width/2, height/2);
 
     this.rays = []
-    for(let a = 0; a < 360; a += 10){
+    for(let a = 0; a < 360; a += 1){
       this.rays.push(new Ray(this.pos, radians(a)));
     }
   }
@@ -13,30 +13,32 @@ class Particle{
 
   }
 
-  look(walls){
-    for (let ray of this.rays){
-      let closestPoint = null;
+  look(walls) {
+    for (let i = 0; i < this.rays.length; i++) {
+      const ray = this.rays[i];
+      let closest = null;
       let record = Infinity;
 
-      for(let wall of walls){
-        const point = ray.cast(wall);
-        
-        if(point){
-          const distance = p5.Vector.dist(this.pos, point);
+      for (let wall of walls) {
+        const pt = ray.cast(wall);
 
-          if(distance < record){
-            record = distance;
-            closestPoint = point;
-          }
+        if (pt) {
+          const d = p5.Vector.dist(this.pos, pt);
 
-          if(closestPoint){
-            line(this.pos.x, this.pos.y, closestPoint.x, closestPoint.y);
-
+          if (d < record) {
+            record = d;
+            closest = pt;
           }
         }
       }
-    }
 
+      if (closest) {
+        // colorMode(HSB);
+        // stroke((i + frameCount * 2) % 360, 255, 255, 50);
+        stroke(255, 100);
+        line(this.pos.x, this.pos.y, closest.x, closest.y);
+      }
+    }
   }
 
     show(){

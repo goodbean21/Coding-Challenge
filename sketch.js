@@ -14,6 +14,11 @@ function setup(){
 
   }
 
+  walls.push( new Boundary(0, 0, width, 0));
+  walls.push( new Boundary(width, 0, width, height));
+  walls.push( new Boundary(width, height, 0, height));
+  walls.push( new Boundary(0, height, 0, 0));
+
   // ray = new Ray(100, 200);
   particle = new Particle();
 
@@ -26,7 +31,7 @@ function draw(){
     wall.show();
 
   }
-  
+
   particle.look(walls);
 
   particle.update(mouseX, mouseY);
