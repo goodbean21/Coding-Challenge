@@ -8,6 +8,8 @@ let yoff = 10000;
 const sceneWidth = 400;
 const sceneHeight = 400;
 
+let sliderFOV;
+
 function keyPressed(){
   if (key == 'A'){
     particle.rotate(0.1);
@@ -16,6 +18,12 @@ function keyPressed(){
     particle.rotate(-0.1);
 
   }
+}
+
+function changeFOV(){
+  const fov = sliderFOV.value();
+  particle.updateFOV(fov);
+
 }
 
 function setup(){
@@ -30,6 +38,9 @@ function setup(){
 
   }
 
+  sliderFOV = createSlider(0, 360, 45);
+  sliderFOV.input(changeFOV);
+
   walls.push( new Boundary(0, 0, sceneWidth, 0));
   walls.push( new Boundary(sceneWidth, 0, sceneWidth, sceneHeight));
   walls.push( new Boundary(sceneWidth, sceneHeight, 0, sceneHeight));
@@ -43,14 +54,10 @@ function setup(){
 function draw(){
   background(0);
 
-  if(keyIsDown(LEFT_ARROW)){
-    particle.rotate(0.05);
-
-  }else if(keyIsDown(RIGHT_ARROW)){
-      particle.rotate(-0.05);
-
-    }
-
+  if(keyIsDown(LEFT_ARROW))         particle.rotate(-0.05);
+  else if(keyIsDown(RIGHT_ARROW))   particle.rotate(0.05);
+  else if(keyIsDown(UP_ARROW))      particle.move(1);
+  else if(keyIsDown(DOWN_ARROW))    particle.move(-1);
 
   for (let wall of walls){
     wall.show();
@@ -82,10 +89,10 @@ function draw(){
 
   // particle.update(mouseX, mouseY);
 
-  particle.update(noise(xoff) * sceneWidth, noise(yoff) * sceneHeight);
-
-  xoff += 0.01;
-  yoff += 0.01;
+  // particle.update(noise(xoff) * sceneWidth, noise(yoff) * sceneHeight);
+  //
+  // xoff += 0.01;
+  // yoff += 0.01;
 
   particle.show();
 

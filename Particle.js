@@ -3,20 +3,36 @@ class Particle{
     this.pos = createVector(width/2, height/2);
     this.heading = 0;
     this.rays = []
+    this.fov = 45;
 
-    for(let a = 0; a < 60; a += 1){
+    for(let a = -this.fov/2; a < this.fov/2; a += 1){
       this.rays.push(new Ray(this.pos, radians(a)));
+    }
+  }
+
+  updateFOV(fov){
+    this.fov = fov;
+    this.rays = [];
+    for(let a = -this.fov/2; a < this.fov/2; a += 1){
+      this.rays.push(new Ray(this.pos, radians(a) + this.heading));
     }
   }
 
   rotate(angle){
     this.heading += angle;
-    for(let i = 0; i < this.rays.length; i += 1){
-      this.rays[i].setAngle(radians(i) + this.heading);
-
+    let index = 0;
+    for(let a = -this.fov/2; a < this.fov/2; a += 1){
+      this.rays[index].setAngle(radians(a) + this.heading);
+      index++;
     }
   }
 
+  move(amount){
+    const velocity = p5.Vector.fromAngle(this.heading);
+    velocity.setMag(amount);
+    this.pos.add(velocity);
+
+  }
 
   update(x, y){
     this.pos.set(x, y);
