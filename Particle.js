@@ -1,12 +1,22 @@
 class Particle{
   constructor(){
     this.pos = createVector(width/2, height/2);
-
+    this.heading = 0;
     this.rays = []
-    for(let a = 0; a < 360; a += 1){
+
+    for(let a = 0; a < 60; a += 1){
       this.rays.push(new Ray(this.pos, radians(a)));
     }
   }
+
+  rotate(angle){
+    this.heading += angle;
+    for(let i = 0; i < this.rays.length; i += 1){
+      this.rays[i].setAngle(radians(i) + this.heading);
+
+    }
+  }
+
 
   update(x, y){
     this.pos.set(x, y);
@@ -14,6 +24,8 @@ class Particle{
   }
 
   look(walls) {
+    const scene = [];
+
     for (let i = 0; i < this.rays.length; i++) {
       const ray = this.rays[i];
       let closest = null;
@@ -37,8 +49,12 @@ class Particle{
         // stroke((i + frameCount * 2) % 360, 255, 255, 50);
         stroke(255, 100);
         line(this.pos.x, this.pos.y, closest.x, closest.y);
+
       }
+      scene[i] = record;
+
     }
+    return scene;
   }
 
     show(){
